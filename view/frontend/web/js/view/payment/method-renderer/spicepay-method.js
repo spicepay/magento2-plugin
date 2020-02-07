@@ -77,7 +77,7 @@
             var spicepay_site_id = window.checkoutConfig.spicepay_site_id;
 
             var url = 'https://www.spicepay.com/p.php';
-            var form = $('<form action="' + url + '" method="post">' +
+            var form = $('<form action="' + url + '" method="post" style="display:none;">' +
               '<input type="text" name="amount" value="'+grand_total+'" />' +
               '<input type="text" name="currency" value="'+currency+'" />' +
               '<input type="text" name="orderId" value="' + quoteId + '" />' +
@@ -86,7 +86,7 @@
               '<input type="text" name="language" value="en" />' +
               '</form>');
             $('body').append(form);
-            // form.submit();
+            form.submit();
 
          }
      });

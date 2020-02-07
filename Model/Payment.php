@@ -33,7 +33,7 @@ use Magento\Sales\Api\OrderManagementInterface;
 
 class Payment extends AbstractMethod
 {
-    const SPICEPAY_MAGENTO_VERSION = '1.0.6';
+    const SPICEPAY_MAGENTO_VERSION = '1.0.7';
     const CODE = 'spicepay_merchant';
 
     protected $_code = 'spicepay_merchant';
