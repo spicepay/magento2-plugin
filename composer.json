@@ -1,0 +1,39 @@
+{
+    "name": "spicepay/magento2-plugin",
+    "type": "magento2-module",
+    "description": "Bitcoin and Altcoin Payment Gateway for Magento 2 via SpicePay",
+    "version": "1.0.6",
+    "keywords": [
+      "spicepay",
+      "bitcoin",
+      "merchant",
+      "magento",
+      "btc",
+      "ethereum",
+      "litecoin",
+      "eth",
+      "ltc",
+      "ripple",
+      "xrp",
+      "payment",
+      "altcoin",
+      "altcoins"
+    ],
+    "homepage": "https://spicepay.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "SpicePay and contributors",
+            "homepage": "https://github.com/spicepay/magento2-plugin/graphs/contributors"
+        }
+    ],
+    "require": {
+        "spicepay/spicepay-php": "1.*"
+    },
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "SpicePay\\Merchant\\": ""
+        }
+    }
+}

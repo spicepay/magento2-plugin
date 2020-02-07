@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+* SpicePay module dependency
+*
+* @category    SpicePay
+* @package     SpicePay_Merchant
+* @author      SpicePay
+* @copyright   SpicePay (https://spicepay.com)
+* @license     https://github.com/spicepay/magento2-plugin/blob/master/LICENSE The MIT License (MIT)
+*/
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <spicepay_merchant>
+                <active>0</active>
+                <model>SpicePay\Merchant\Model\Payment</model>
+                <order_status>pending_payment</order_status>
+                <payment_action>authorize_capture</payment_action>
+                <title>Bitcoin and Altcoins via SpicePay</title>
+            </spicepay_merchant>
+        </payment>
+    </default>
+</config>

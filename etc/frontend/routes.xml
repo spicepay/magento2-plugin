@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+* SpicePay admin configuration
+*
+* @category    SpicePay
+* @package     SpicePay_Merchant
+* @author      SpicePay
+* @copyright   SpicePay (https://spicepay.com)
+* @license     https://github.com/spicepay/magento2-plugin/blob/master/LICENSE The MIT License (MIT)
+*/
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route id="spicepay" frontName="spicepay">
+            <module name="SpicePay_Merchant" />
+        </route>
+    </router>
+</config>
