@@ -33,7 +33,7 @@ use Magento\Sales\Api\OrderManagementInterface;
 
 class Payment extends AbstractMethod
 {
-    const SPICEPAY_MAGENTO_VERSION = '1.0.7';
+    const SPICEPAY_MAGENTO_VERSION = '1.0.8';
     const CODE = 'spicepay_merchant';
 
     protected $_code = 'spicepay_merchant';
@@ -156,34 +156,40 @@ class Payment extends AbstractMethod
                     
                         $sum = number_format($orderTotal, 2, '.', ''); 
                           if ((float)$sum != $receivedAmountUSD) {
-                                    throw new \Exception('Bad amount.');
+                                    return 'Bad amount.';
                           } else {
 
                                 if ($status == 'paid') {
                                     $orders->setState(Order::STATE_PROCESSING);
                                     $orders->setStatus($orders->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));
                                     $orders->save();
+                                    return "OK";
                                 } elseif (in_array($status, ['invalid', 'expired', 'canceled', 'refunded'])) {
                                     $this->orderManagement->cancel($orderId);
-
+                                    return "Order status ".$status;
+                                } else {
+                                  return "wrong order status - ".$status;
                                 }
 
                           
                           }
                         
+                    } else {
+                      return "Hash wrong.";
                     }
                     
                 }else{
-                   throw new \Exception('SpicePay Order #' . $request_id . ' does not exist');
+                   return 'SpicePay Order #' . $magentoOrderId . ' does not exist';
                 }
                 
                 
             } else {
-                throw new \Exception('Fail');
+                return 'Fail';
             }
 
         } catch (\Exception $e) {
             $this->_logger->error($e);
+            return "Error: ".$e;
         }
     }
 }

@@ -50,8 +50,9 @@ class Callback extends Action
             ? filter_input(INPUT_POST, 'order_id') : filter_input(INPUT_GET, 'order_id'));
 
         $order = $this->order->loadByIncrementId($request_order_id);
-        $this->spicepayPayment->validateSpicePayCallback($order);
+        $response = $this->spicepayPayment->validateSpicePayCallback($order);
 
-        $this->getResponse()->setBody('OK');
+        $this->getResponse()->setBody($response);
+        die($response);
     }
 }
