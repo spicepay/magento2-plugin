@@ -2,7 +2,7 @@
     "name": "spicepay/magento2-plugin",
     "type": "magento2-module",
     "description": "Bitcoin and Altcoin Payment Gateway for Magento 2 via SpicePay",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "keywords": [
       "spicepay",
       "bitcoin",
