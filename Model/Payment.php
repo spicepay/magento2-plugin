@@ -33,7 +33,7 @@ use Magento\Sales\Api\OrderManagementInterface;
 
 class Payment extends AbstractMethod
 {
-    const SPICEPAY_MAGENTO_VERSION = '1.0.9';
+    const SPICEPAY_MAGENTO_VERSION = '1.1.0';
     const CODE = 'spicepay_merchant';
 
     protected $_code = 'spicepay_merchant';
@@ -80,7 +80,7 @@ class Payment extends AbstractMethod
         array $data = [],
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null
-
+        
     ) {
         parent::__construct(
             $context,
@@ -116,6 +116,7 @@ class Payment extends AbstractMethod
      */
     public function validateSpicePayCallback($order)
     {
+
         try {
             if (isset($_POST['paymentId']) && isset($_POST['orderId']) && isset($_POST['hash']) 
             && isset($_POST['paymentCryptoAmount']) && isset($_POST['paymentAmountUSD']) 
