@@ -34,7 +34,7 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 
 class AdditionalConfigVars extends AbstractMethod
 {
-    const SPICEPAY_MAGENTO_VERSION = '1.1.0';
+    const SPICEPAY_MAGENTO_VERSION = '1.1.1';
     const CODE = 'spicepay_merchant';
 
     protected $_code = 'spicepay_merchant';

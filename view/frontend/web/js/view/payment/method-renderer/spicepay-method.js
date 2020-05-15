@@ -70,23 +70,32 @@
          },
 
          afterPlaceOrder: function (quoteId) {
-            var firstname = window.checkoutConfig.customerData.firstname;
-            var lastname = window.checkoutConfig.customerData.lastname;
-            var currency = window.checkoutConfig.quoteData.store_currency_code;
-            var grand_total = window.checkoutConfig.quoteData.grand_total;
-            var spicepay_site_id = window.checkoutConfig.spicepay_site_id;
+            $.ajax({
+                  type: "POST",
+                  url:  window.BASE_URL+'/spicepay/ajax/getorder',
+                  data: { order_id: quoteId},
+                  dataType: "json",
+                  success: function(d){
+                    var firstname = window.checkoutConfig.customerData.firstname;
+                    var lastname = window.checkoutConfig.customerData.lastname;
+                    var currency = window.checkoutConfig.quoteData.store_currency_code;
+                    var grand_total = d.totalPrice;
+                    var spicepay_site_id = window.checkoutConfig.spicepay_site_id;
 
-            var url = 'https://www.spicepay.com/p.php';
-            var form = $('<form action="' + url + '" method="post" style="display:none;">' +
-              '<input type="text" name="amount" value="'+grand_total+'" />' +
-              '<input type="text" name="currency" value="'+currency+'" />' +
-              '<input type="text" name="orderId" value="' + quoteId + '" />' +
-              '<input type="text" name="siteId" value="'+spicepay_site_id+'" />' +
-              '<input type="text" name="clientName" value="'+firstname+' '+ lastname+'" />' +
-              '<input type="text" name="language" value="en" />' +
-              '</form>');
-            $('body').append(form);
-            form.submit();
+                    var url = 'https://www.spicepay.com/p.php';
+                    var form = $('<form action="' + url + '" method="post">' +
+                      '<input type="text" name="amount" value="'+grand_total+'" />' +
+                      '<input type="text" name="currency" value="'+currency+'" />' +
+                      '<input type="text" name="orderId" value="' + d.order_id + '" />' +
+                      '<input type="text" name="siteId" value="'+spicepay_site_id+'" />' +
+                      '<input type="text" name="clientName" value="'+firstname+' '+ lastname+'" />' +
+                      '<input type="text" name="language" value="en" />' +
+                      '</form>');
+                    $('body').append(form);
+                    form.submit();
+
+                  }
+                })
 
          }
      });
