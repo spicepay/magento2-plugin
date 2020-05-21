@@ -13,11 +13,14 @@ class GetOrder extends \Magento\Framework\App\Action\Action {
     protected $_order;
     protected $resultJsonFactory;
     protected $checkoutSession;
+    protected $_logger;
 
     public function __construct(Context $context, 
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Psr\Log\LoggerInterface $logger,
         Session $checkoutSession)
     {
+        $this->_logger = $logger;
         $this->resultJsonFactory = $resultJsonFactory;
         parent::__construct($context);
         $this->checkoutSession = $checkoutSession;
@@ -27,7 +30,7 @@ class GetOrder extends \Magento\Framework\App\Action\Action {
         $result = $this->resultJsonFactory->create();
         if ($this->getRequest()->isAjax()) 
         {
-            $order_id = $this->checkoutSession->getLastOrderId();
+          $order_id = $this->checkoutSession->getLastOrderId();
 
           $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); 
           $order = $objectManager->create('\Magento\Sales\Model\OrderRepository')->get($order_id);
@@ -61,9 +64,10 @@ class GetOrder extends \Magento\Framework\App\Action\Action {
 
           $tax_amount=$order->getTaxAmount();
           $total=$order->getGrandTotal();
-
+          $level = 'DEBUG';
+          $this->_logger->log($level,'check_order_id', array('check_order_id'=>$order_id, 'check_totalPrice' => $total, 'check_custLastName'=>$custLastName, 'check_custFirsrName' => $custFirsrName)); 
             $result = $this->resultJsonFactory->create();
-            $result->setData(['totalPrice' => $total, 'order_id' => $order_id]);
+            $result->setData(['totalPrice' => $total, 'order_id' => $order_id, 'custLastName' => $custLastName, 'custFirsrName' => $custFirsrName]);
 
 
             return $result;

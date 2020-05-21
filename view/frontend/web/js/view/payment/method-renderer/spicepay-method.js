@@ -53,7 +53,7 @@
              if (emailValidationResult && this.validate() && additionalValidators.validate()) {
                  this.isPlaceOrderActionAllowed(false);
                  placeOrder = placeOrderAction(this.getData(), false, this.messageContainer);
-
+                 console.log(placeOrder);
                  $.when(placeOrder).fail(function () {
                      self.isPlaceOrderActionAllowed(true);
                  }).done(this.afterPlaceOrder.bind(this));
@@ -69,15 +69,17 @@
              return true;
          },
 
-         afterPlaceOrder: function (quoteId) {
+         afterPlaceOrder: function (quoteId, url) {
+
             $.ajax({
                   type: "POST",
                   url:  window.BASE_URL+'/spicepay/ajax/getorder',
                   data: { order_id: quoteId},
                   dataType: "json",
                   success: function(d){
-                    var firstname = window.checkoutConfig.customerData.firstname;
-                    var lastname = window.checkoutConfig.customerData.lastname;
+                    var firstname = d.custFirsrName;
+                    var lastname = d.custLastName;
+                    
                     var currency = window.checkoutConfig.quoteData.store_currency_code;
                     var grand_total = d.totalPrice;
                     var spicepay_site_id = window.checkoutConfig.spicepay_site_id;
