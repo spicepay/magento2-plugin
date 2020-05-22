@@ -44,6 +44,7 @@ class Payment extends AbstractMethod
     protected $spicepay;
     protected $storeManager;
     protected $orderManagement;
+    protected $_logger;
 
     /**
      * @param Context $context
@@ -116,7 +117,8 @@ class Payment extends AbstractMethod
      */
     public function validateSpicePayCallback($order)
     {
-
+        $level = 'DEBUG';
+        $this->_logger->log($level,'spicepay_callbackfunction', array('is_in_callback'=>"yes", "SPICEPAY_MAGENTO_VERSION"=> SPICEPAY_MAGENTO_VERSION)); 
         try {
             if (isset($_POST['paymentId']) && isset($_POST['orderId']) && isset($_POST['hash']) 
             && isset($_POST['paymentCryptoAmount']) && isset($_POST['paymentAmountUSD']) 
@@ -135,8 +137,7 @@ class Payment extends AbstractMethod
                 if(isset($_POST['paymentCryptoAmount']) && isset($_POST['receivedCryptoAmount'])) {
                     $paymentCryptoAmount = addslashes(filter_input(INPUT_POST, 'paymentCryptoAmount', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
                     $receivedCryptoAmount = addslashes(filter_input(INPUT_POST, 'receivedCryptoAmount', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
-                }
-                else {
+                } else {
                     $paymentCryptoAmount = addslashes(filter_input(INPUT_POST, 'paymentAmountBTC', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
                     $receivedCryptoAmount = addslashes(filter_input(INPUT_POST, 'receivedAmountBTC', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
                 }
@@ -146,7 +147,10 @@ class Payment extends AbstractMethod
                 for ($i=0; $i < $zeroes; $i++) { 
                     $magentoOrderId= '0'.$magentoOrderId;
                 }
-
+                $level = 'DEBUG';
+                $logger->log($level,'spicepay_callbackfunction', array('orderid_in_callback'=>$orderId)); 
+                $level = 'DEBUG';
+                $logger->log($level,'spicepay_callbackfunction', array('magentoOrderId'=>$magentoOrderId)); 
                 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
                 $orders = $objectManager->create('Magento\Sales\Model\Order')->load($magentoOrderId);
                 $orderTotal= $orders->getGrandTotal();
@@ -157,6 +161,8 @@ class Payment extends AbstractMethod
                     
                         $sum = number_format($orderTotal, 2, '.', ''); 
                           if ((float)$sum != $receivedAmountUSD) {
+        $level = 'DEBUG';
+        $this->_logger->log($level,'spicepay_return', array('spicepay_return'=>"Bad amount.")); 
                                     return 'Bad amount.';
                           } else {
 
@@ -164,11 +170,17 @@ class Payment extends AbstractMethod
                                     $orders->setState(Order::STATE_PROCESSING);
                                     $orders->setStatus($orders->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));
                                     $orders->save();
+        $level = 'DEBUG';
+        $this->_logger->log($level,'spicepay_return', array('spicepay_return'=>"ok")); 
                                     return "OK";
                                 } elseif (in_array($status, ['invalid', 'expired', 'canceled', 'refunded'])) {
                                     $this->orderManagement->cancel($orderId);
+        $level = 'DEBUG';
+        $this->_logger->log($level,'spicepay_return', array('spicepay_return'=>"Order status ".$status)); 
                                     return "Order status ".$status;
                                 } else {
+        $level = 'DEBUG';
+        $this->_logger->log($level,'spicepay_return', array('spicepay_return'=>"wrong order status - ".$status)); 
                                   return "wrong order status - ".$status;
                                 }
 
@@ -176,20 +188,28 @@ class Payment extends AbstractMethod
                           }
                         
                     } else {
+        $level = 'DEBUG';
+        $this->_logger->log($level,'spicepay_return', array('spicepay_return'=>"Hash wrong.")); 
                       return "Hash wrong.";
                     }
                     
                 }else{
+        $level = 'DEBUG';
+        $this->_logger->log($level,'spicepay_return', array('spicepay_return'=>'SpicePay Order #' . $magentoOrderId . ' does not exist')); 
                    return 'SpicePay Order #' . $magentoOrderId . ' does not exist';
                 }
                 
                 
             } else {
+        $level = 'DEBUG';
+        $this->_logger->log($level,'spicepay_return', array('spicepay_return'=>'Fail')); 
                 return 'Fail';
             }
 
         } catch (\Exception $e) {
             $this->_logger->error($e);
+        $level = 'DEBUG';
+        $this->_logger->log($level,'spicepay_return', array('spicepay_return'=>"Error: ".$e)); 
             return "Error: ".$e;
         }
     }
