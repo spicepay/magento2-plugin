@@ -30,7 +30,7 @@ class GetOrder extends \Magento\Framework\App\Action\Action {
         $result = $this->resultJsonFactory->create();
         if ($this->getRequest()->isAjax()) 
         {
-          $order_id = $this->checkoutSession->getLastOrderId();
+          $order_id = $this->checkoutSession->getLastRealOrderId();
 
           $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); 
           $order = $objectManager->create('\Magento\Sales\Model\OrderRepository')->get($order_id);
